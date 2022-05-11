@@ -22,5 +22,15 @@
  */
 function hrs_sample_block_init() {
 	register_block_type( __DIR__ . '/build' );
+
+	// automatically load dependencies and version
+	$asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php');
+	
+	wp_register_script(
+		'gutenberg-examples-03-esnext',
+		plugins_url( 'build/index.js', __FILE__ ),
+		$asset_file['dependencies'],
+		$asset_file['version']
+	);
 }
 add_action( 'init', 'hrs_sample_block_init' );

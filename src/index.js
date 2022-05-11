@@ -26,6 +26,25 @@ import save from './save';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType( 'hrs-sample-block/hrs-sample-block', {
+	attributes: {
+        content: {
+            type: 'array',
+            source: 'children',
+            selector: 'p',
+        },
+		alignment: {
+            type: 'string',
+            default: 'none',
+        },
+		bg_color: { 
+			type: 'string', 
+			default: '#000000' 
+		},
+        text_color: { 
+			type: 'string', 
+			default: '#ffffff' 
+		},
+    },
 	/**
 	 * @see ./edit.js
 	 */

@@ -11,7 +11,14 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
  */
-import { useBlockProps } from '@wordpress/block-editor';
+import {
+    useBlockProps,
+    RichText,
+    AlignmentToolbar,
+    BlockControls,
+	ColorPalette,
+    InspectorControls,
+} from '@wordpress/block-editor';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -29,13 +36,68 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-export default function Edit() {
+export default function Edit( { attributes, setAttributes } ) {
+	const onChangeContent = ( newContent ) => {
+		setAttributes( { content: newContent } );
+	};
+
+	const onChangeAlignment = ( newAlignment ) => {
+		setAttributes( {
+			alignment: newAlignment === undefined ? 'none' : newAlignment,
+		} );
+	};
+
+	const onChangeBGColor = ( hexColor ) => {
+		setAttributes( { bg_color: hexColor } );
+	};
+
+	const onChangeTextColor = ( hexColor ) => {
+		setAttributes( { text_color: hexColor } );
+	};
+
 	return (
-		<p { ...useBlockProps() }>
-			{ __(
-				'Sample WP Block – hello from the editor!',
-				'hrs-sample-block'
-			) }
-		</p>
+		<div 
+			{ ...useBlockProps() }
+			style={ { 
+				textAlign: attributes.alignment,
+				backgroundColor: attributes.bg_color,
+				color: attributes.text_color,
+			} }
+		>
+			{
+				<BlockControls>
+					<AlignmentToolbar
+						value={ attributes.alignment }
+						onChange={ onChangeAlignment }
+					/>
+				</BlockControls>
+			}
+			<RichText
+				className={ attributes.className }				
+				tagName="p"
+				onChange={ onChangeContent }
+				value={ attributes.content }
+			/>
+			<InspectorControls key="setting">
+				<div id="gutenpride-controls">
+					<fieldset>
+						<legend className="blocks-base-control__label">
+							{ __( 'Background color', 'gutenpride' ) }
+						</legend>
+						<ColorPalette // Element Tag for Gutenberg standard colour selector
+							onChange={ onChangeBGColor } // onChange event callback
+						/>
+					</fieldset>
+					<fieldset>
+						<legend className="blocks-base-control__label">
+							{ __( 'Text color', 'gutenpride' ) }
+						</legend>
+						<ColorPalette // Element Tag for Gutenberg standard colour selector
+							onChange={ onChangeTextColor } // onChange event callback
+						/>
+					</fieldset>
+				</div>
+			</InspectorControls>
+		</div>
 	);
 }
