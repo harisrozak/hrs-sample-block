@@ -31,18 +31,32 @@ registerBlockType( 'hrs-sample-block/hrs-sample-block', {
             type: 'array',
             source: 'children',
             selector: 'p',
+			default: 'Your content is here, go ahead edit directly.',
         },
 		alignment: {
             type: 'string',
             default: 'none',
         },
-		bg_color: { 
-			type: 'string', 
-			default: '#000000' 
+		style: { // The control is declared on supports > color > background & text
+			type: 'object',
+			default: {
+				color: {
+					text: '#ffffff',
+					background: '#21759b',
+				}
+			}
 		},
-        text_color: { 
+		content_title: { 
 			type: 'string', 
-			default: '#ffffff' 
+			default: 'Your title' 
+		},
+        content_footer: { 
+			type: 'string', 
+			default: 'Your footer' 
+		},
+		padding: { 
+			type: 'number', 
+			default: 25 
 		},
     },
 	/**

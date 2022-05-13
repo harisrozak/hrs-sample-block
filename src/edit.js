@@ -6,19 +6,28 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
+ * WordPress block-editor.
  *
- * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
+ * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/
  */
 import {
     useBlockProps,
     RichText,
     AlignmentToolbar,
     BlockControls,
-	ColorPalette,
     InspectorControls,
 } from '@wordpress/block-editor';
+
+/**
+ * WordPress components.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/components/
+ */
+import {
+	PanelBody,
+    TextControl,
+	RangeControl,
+} from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -47,57 +56,59 @@ export default function Edit( { attributes, setAttributes } ) {
 		} );
 	};
 
-	const onChangeBGColor = ( hexColor ) => {
-		setAttributes( { bg_color: hexColor } );
-	};
+	return (		
+		<div { ...useBlockProps() }>
+			<BlockControls>
+				<AlignmentToolbar
+					value={ attributes.alignment }
+					onChange={ onChangeAlignment }
+				/>
+			</BlockControls>
 
-	const onChangeTextColor = ( hexColor ) => {
-		setAttributes( { text_color: hexColor } );
-	};
-
-	return (
-		<div 
-			{ ...useBlockProps() }
-			style={ { 
-				textAlign: attributes.alignment,
-				backgroundColor: attributes.bg_color,
-				color: attributes.text_color,
-			} }
-		>
-			{
-				<BlockControls>
-					<AlignmentToolbar
-						value={ attributes.alignment }
-						onChange={ onChangeAlignment }
-					/>
-				</BlockControls>
-			}
-			<RichText
-				className={ attributes.className }				
-				tagName="p"
-				onChange={ onChangeContent }
-				value={ attributes.content }
-			/>
 			<InspectorControls key="setting">
-				<div id="gutenpride-controls">
-					<fieldset>
-						<legend className="blocks-base-control__label">
-							{ __( 'Background color', 'gutenpride' ) }
-						</legend>
-						<ColorPalette // Element Tag for Gutenberg standard colour selector
-							onChange={ onChangeBGColor } // onChange event callback
-						/>
-					</fieldset>
-					<fieldset>
-						<legend className="blocks-base-control__label">
-							{ __( 'Text color', 'gutenpride' ) }
-						</legend>
-						<ColorPalette // Element Tag for Gutenberg standard colour selector
-							onChange={ onChangeTextColor } // onChange event callback
-						/>
-					</fieldset>
-				</div>
+				<PanelBody>
+					<TextControl
+						label={ __( 'Title Text', 'hrs-sample-block' ) }
+						value={ attributes.content_title }
+						onChange={ text => setAttributes( { content_title: text } ) }
+					/>
+				</PanelBody>
+				<PanelBody>
+					<TextControl
+						label={ __( 'Footer Text', 'hrs-sample-block' ) }
+						value={ attributes.content_footer }
+						onChange={ text => setAttributes( { content_footer: text } ) }
+					/>
+				</PanelBody>	
+				<PanelBody>
+                    <RangeControl
+                        beforeIcon="arrow-left-alt2"
+                        afterIcon="arrow-right-alt2"
+                        label={ __( 'Padding Left and Right', 'hrs-sample-block' ) }
+                        value={ attributes.padding }
+                        onChange={ number => setAttributes( { padding: number } ) }
+                        min={ 0 }
+                        max={ 100 }
+                    />
+                </PanelBody>				
 			</InspectorControls>
+
+			<div 
+				style={ { 
+					textAlign: attributes.alignment,
+					paddingLeft: attributes.padding,
+					paddingRight: attributes.padding,
+				} }
+			>				
+				<h2>{ attributes.content_title }</h2>
+				<RichText
+					className={ attributes.className }				
+					tagName="p"
+					onChange={ onChangeContent }
+					value={ attributes.content }
+				/>
+				<h4>{ attributes.content_footer }</h4>
+			</div>
 		</div>
 	);
 }

@@ -6,12 +6,11 @@
 import { __ } from '@wordpress/i18n';
 
 /**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
+ * WordPress block-editor.
  *
- * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
+ * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/
  */
- import {
+import {
     useBlockProps,
     RichText,
 } from '@wordpress/block-editor';
@@ -25,23 +24,26 @@ import { __ } from '@wordpress/i18n';
  *
  * @return {WPElement} Element to render.
  */
- export default function save( { attributes } ) {
+export default function save( { attributes } ) {
 	const blockProps = useBlockProps.save();
 
 	return (
-		<div 
-			{ ...blockProps }
-			style={ {
-				backgroundColor: attributes.bg_color,
-				color: attributes.text_color,
-				textAlign: attributes.alignment,
-			} }
-		>
-			<RichText.Content
-				className={ `sample-wp-block` }
-				tagName="p"
-				value={ attributes.content }
-			/>
+		<div { ...blockProps }>
+			<div 
+				style={ {
+					textAlign: attributes.alignment,
+					paddingLeft: attributes.padding,
+					paddingRight: attributes.padding,
+				} }
+			>
+				<h2>{ attributes.content_title }</h2>
+				<RichText.Content
+					className={ `sample-wp-block` }
+					tagName="p"
+					value={ attributes.content }
+				/>
+				<h4>{ attributes.content_title }</h4>
+			</div>
 		</div>
 	);
 }
