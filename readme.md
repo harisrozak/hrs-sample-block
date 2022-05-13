@@ -1,10 +1,10 @@
 # WordPress Gutenberg block sample plugin
 
-How to create block with @wordpress/create-block:
+How to create block with `@wordpress/create-block` package:
 
 * Create new block: `npx @wordpress/create-block`
 * Build the code for production: `npm run build`
-* Further reads: [Creating dynamic blocks](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/)
+* Further reads: [Creating block](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/)
 
 
 This plugin is based on below documentation:
