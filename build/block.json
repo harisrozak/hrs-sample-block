@@ -18,6 +18,45 @@
 			"padding": true
 		}
 	},
+	"attributes": {
+		"content": {
+            "type": "string",
+			"default": "Your content is here, go ahead edit directly."
+        },
+		"alignment": {
+            "type": "string",
+            "default": "initial"
+        },
+		"content_title": { 
+			"type": "string", 
+			"default": "Your title" 
+		},
+		"content_footer": { 
+			"type": "string", 
+			"default": "Your footer" 
+		},
+		"style": {
+			"type": "object",
+			"default": {
+				"color": {
+					"text": "#ffffff",
+					"background": "#21759b"
+				}
+			}
+		},       
+		"padding": { 
+			"type": "number", 
+			"default": 25 
+		},
+		"post_type": { 
+			"type": "string", 
+			"default": "post" 
+		},
+		"posts_count": { 
+			"type": "number", 
+			"default": 5 
+		}
+	},
 	"textdomain": "hrs-sample-block",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",

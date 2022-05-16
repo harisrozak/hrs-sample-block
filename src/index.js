@@ -26,39 +26,6 @@ import save from './save';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType( 'hrs-sample-block/hrs-sample-block', {
-	attributes: {
-        content: {
-            type: 'array',
-            source: 'children',
-            selector: 'p',
-			default: 'Your content is here, go ahead edit directly.',
-        },
-		alignment: {
-            type: 'string',
-            default: 'none',
-        },
-		style: { // The control is declared on supports > color > background & text
-			type: 'object',
-			default: {
-				color: {
-					text: '#ffffff',
-					background: '#21759b',
-				}
-			}
-		},
-		content_title: { 
-			type: 'string', 
-			default: 'Your title' 
-		},
-        content_footer: { 
-			type: 'string', 
-			default: 'Your footer' 
-		},
-		padding: { 
-			type: 'number', 
-			default: 25 
-		},
-    },
 	/**
 	 * @see ./edit.js
 	 */

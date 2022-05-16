@@ -12,7 +12,6 @@ import { __ } from '@wordpress/i18n';
  */
 import {
     useBlockProps,
-    RichText,
 } from '@wordpress/block-editor';
 
 /**
@@ -24,26 +23,7 @@ import {
  *
  * @return {WPElement} Element to render.
  */
-export default function save( { attributes } ) {
+export default function save() {
 	const blockProps = useBlockProps.save();
-
-	return (
-		<div { ...blockProps }>
-			<div 
-				style={ {
-					textAlign: attributes.alignment,
-					paddingLeft: attributes.padding,
-					paddingRight: attributes.padding,
-				} }
-			>
-				<h2>{ attributes.content_title }</h2>
-				<RichText.Content
-					className={ `sample-wp-block` }
-					tagName="p"
-					value={ attributes.content }
-				/>
-				<h4>{ attributes.content_title }</h4>
-			</div>
-		</div>
-	);
+	return null;
 }

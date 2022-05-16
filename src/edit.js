@@ -27,7 +27,15 @@ import {
 	PanelBody,
     TextControl,
 	RangeControl,
+	SelectControl,
 } from '@wordpress/components';
+
+/**
+ * WordPress data.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-data/
+ */
+import { useSelect } from '@wordpress/data';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -46,16 +54,37 @@ import './editor.scss';
  * @return {WPElement} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
-	const onChangeContent = ( newContent ) => {
-		setAttributes( { content: newContent } );
+	const onChangeContent = ( html ) => {
+		setAttributes( { content: html } );
 	};
-
 	const onChangeAlignment = ( newAlignment ) => {
 		setAttributes( {
 			alignment: newAlignment === undefined ? 'none' : newAlignment,
 		} );
 	};
 
+	const posts = useSelect( ( select ) => {
+		return select( 'core' ).getEntityRecords( 'postType', attributes.post_type, {
+			per_page: attributes.posts_count,
+		} );
+	}, [] );
+
+	const printPosts = ( posts ) => {
+		return ( 
+			<ul>
+				{ 
+					posts.map( ( post, index ) => (
+						<li>
+							<a href={ post.link }>
+								{ post.title.rendered }
+							</a>
+						</li>
+					) )
+				}
+			</ul>
+		);
+	}
+	
 	return (		
 		<div { ...useBlockProps() }>
 			<BlockControls>
@@ -66,14 +95,12 @@ export default function Edit( { attributes, setAttributes } ) {
 			</BlockControls>
 
 			<InspectorControls key="setting">
-				<PanelBody>
+				<PanelBody title={ __( 'Text', 'hrs-sample-block' ) } initialOpen={ true }>
 					<TextControl
 						label={ __( 'Title Text', 'hrs-sample-block' ) }
 						value={ attributes.content_title }
 						onChange={ text => setAttributes( { content_title: text } ) }
 					/>
-				</PanelBody>
-				<PanelBody>
 					<TextControl
 						label={ __( 'Footer Text', 'hrs-sample-block' ) }
 						value={ attributes.content_footer }
@@ -90,7 +117,27 @@ export default function Edit( { attributes, setAttributes } ) {
                         min={ 0 }
                         max={ 100 }
                     />
-                </PanelBody>				
+                </PanelBody>
+				<PanelBody title={ __( 'Post List', 'hrs-sample-block' ) } initialOpen={ true }>
+					<SelectControl
+						label={ __( 'Post Type', 'hrs-sample-block' ) }
+						value={ attributes.post_type }
+						options={ [
+							{ label: 'Post', value: 'post' },
+							{ label: 'Page', value: 'page' },
+						] }
+						onChange={ string => setAttributes( { post_type: string } ) }
+					/>
+					<RangeControl
+						beforeIcon="arrow-left-alt2"
+						afterIcon="arrow-right-alt2"
+						label={ __( 'Posts Count', 'hrs-sample-block' ) }
+						value={ attributes.posts_count }
+						onChange={ number => setAttributes( { posts_count: number } ) }
+						min={ 1 }
+						max={ 25 }
+					/>
+				</PanelBody>
 			</InspectorControls>
 
 			<div 
@@ -102,11 +149,15 @@ export default function Edit( { attributes, setAttributes } ) {
 			>				
 				<h2>{ attributes.content_title }</h2>
 				<RichText
-					className={ attributes.className }				
 					tagName="p"
 					onChange={ onChangeContent }
 					value={ attributes.content }
 				/>
+				<div>
+					{ ! posts && 'Loading' }
+					{ posts && posts.length === 0 && 'No Posts' }
+					{ posts && posts.length > 0 && printPosts( posts ) }
+				</div>
 				<h4>{ attributes.content_footer }</h4>
 			</div>
 		</div>
